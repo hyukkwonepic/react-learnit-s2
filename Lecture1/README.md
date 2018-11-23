@@ -12,3 +12,7 @@
 
 - [ES6 기본](./es6.md)
 - [컴포넌트 작성 및 분리하기](./components.md)
+
+## 자료
+
+- [슬라이드](./01-react-intro.pdf)
