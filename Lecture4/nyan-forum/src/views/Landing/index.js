@@ -7,8 +7,6 @@ import logo from '../../assets/cat.svg';
 
 export default class Landing extends React.Component {
   handleEnter = () => {
-    // 입장하기 클릭 시 /board로 라우팅합니다
-    this.props.history.push('/board');
   }
 
   render() {
@@ -16,7 +14,7 @@ export default class Landing extends React.Component {
       <Wrapper>
         <img src={logo} alt="logo" />
         <div>냥포럼</div>
-        <Button onClick={this.handleEnter}>입장하기</Button>
+        <Button>입장하기</Button>
       </Wrapper>
     );
   }

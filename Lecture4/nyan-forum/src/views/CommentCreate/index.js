@@ -1,69 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
-import { db } from '../../firebase';
 
 import Button from '../../components/Button';
 
 class CommentCreate extends React.Component {
 
-  state = {
-    author: '',
-    content: ''
-  }
-
   handleChange = (type) => (e) => {
-    this.setState({
-      [type]: e.target.value
-    });
   }
 
   // 새 comment 생성하기
   // PostCreate의 handleSubmit과 비슷한 로직을 담고있습니다
   handleSubmit = async (e) => {
-    e.preventDefault();
-    const confirm = window.confirm('정말로 등록하시겠습니까?');
-  
-    if (confirm) {
-      const { postId } = this.props.match.params;
-      const { author, content } = this.state;
-
-      // comments 컬렉션에 새로운 document의 reference를 생성합니다
-      const newCommentRef = db.collection('comments').doc();
-      await newCommentRef.set({ // 새 document를 생성합니다
-        id: newCommentRef.id,
-        author,
-        content,
-      });
-
-      // 새 comment를 생성했기 때문에, 해당 comment를 post의 comments에 추가해야 합니다
-      const postSnapshot = await db.collection('posts').doc(postId).get();
-      const commentsByPost = postSnapshot.data().comments;
-      await db.collection('posts').doc(postId).update({ // 해당 post document를 업데이트합니다
-        comments: [
-          ...commentsByPost,
-          newCommentRef.id
-        ]
-      });
-
-      alert('성공적으로 등록되었습니다');
-      this.props.history.goBack();
-    }
   }
 
   render() {
-    const { author, content } = this.state;
     return (
       <Wrapper>
         <Form>
           <Nickname>
             <Label>닉네임</Label>
-            <Input value={author} onChange={this.handleChange('author')} />
+            <Input />
           </Nickname>
           <Content>
             <Label>내용</Label>
-            <Textarea value={content} onChange={this.handleChange('content')} />
+            <Textarea />
           </Content>
-          <Button onClick={this.handleSubmit}>댓글 쓰기</Button>
+          <Button >댓글 쓰기</Button>
         </Form>
       </Wrapper>
     );
