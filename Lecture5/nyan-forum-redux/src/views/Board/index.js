@@ -4,7 +4,6 @@ import {
   Switch,
   Route,
 } from 'react-router-dom';
-import { connect } from 'react-redux';
 
 import Header from '../../components/Header';
 import Navbar from '../../components/Navbar';
@@ -12,34 +11,34 @@ import PostList from '../PostList';
 import PostCreate from '../PostCreate';
 import PostDetail from '../PostDetail';
 import CommentCreate from '../CommentCreate';
+import { db } from '../../firebase';
 
-import { fetchBoards } from './actions';
+export default class Board extends React.Component {
 
-class Board extends React.Component {
-
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch(fetchBoards());
+  state = {
+    boards: []
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.boards !== prevProps.boards) {
-      if (this.props.boards[0]) {
-        this.props.history.push(`/board/${this.props.boards[0].id}`);
-      }
+  async componentDidMount() {
+    const boardsSnapshot = await db.collection('boards').get();
+    
+    const boards = boardsSnapshot.docs.map((snapshot) => {
+      return snapshot.data();
+    });
+
+    if (boards && boards.length !== 0) {
+      const activeBoardId = boards[0].id
+      this.setState({
+        boards,
+      }, () => {
+        this.props.history.push(`/board/${activeBoardId}`);
+      });
     }
   }
 
   render() {
-    const {
-      match,
-      boards,
-      isLoading,
-    } = this.props;
-
-    if (isLoading) {
-      return <h1>Loading...</h1>
-    }
+    const { match } = this.props;
+    const { boards } = this.state;
 
     return (
       <div>
@@ -64,12 +63,3 @@ const Contents = styled.div`
   display: flex;
   flex-direction: row;
 `;
-
-const mapStateToProps = (state) => {
-  return {
-    boards: state.board.boards,
-    isLoading: state.board.isLoading,
-  }
-}
-
-export default connect(mapStateToProps)(Board);

@@ -1,10 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
+import { db } from '../../firebase';
 
 import Button from '../../components/Button';
-
-import { createComment } from './actions';
 
 class CommentCreate extends React.Component {
 
@@ -24,15 +22,24 @@ class CommentCreate extends React.Component {
     const confirm = window.confirm('정말로 등록하시겠습니까?');
   
     if (confirm) {
-      const { dispatch, match } = this.props;
-      const { postId } = match.params;
+      const { postId } = this.props.match.params;
       const { author, content } = this.state;
 
-      await dispatch(createComment({
-        postId,
+      const newCommentRef = db.collection('comments').doc();
+      await newCommentRef.set({
+        id: newCommentRef.id,
         author,
         content,
-      }))
+      });
+
+      const postSnapshot = await db.collection('posts').doc(postId).get();
+      const commentsByPost = postSnapshot.data().comments;
+      await db.collection('posts').doc(postId).update({
+        comments: [
+          ...commentsByPost,
+          newCommentRef.id
+        ]
+      });
 
       alert('성공적으로 등록되었습니다');
       this.props.history.goBack();
@@ -115,4 +122,4 @@ const Textarea = styled.textarea`
   padding: 1rem;
 `;
 
-export default connect()(CommentCreate);
+export default CommentCreate;
