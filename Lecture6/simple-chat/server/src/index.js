@@ -27,42 +27,21 @@ const MESSAGE_ADDED = 'MESSAGE_ADDED';
 const resolvers = {
   Query: {
     messages: (root, args, context, info) => {
-      return messages;
+      // TODO
     }
   },
   Mutation: {
     addMessage: (root, args, context, info) => {
-      const { nickname, message } = args;
-      const { pubsub } = context;
-      const messageObject = { id: messageId, nickname, message };
-      messageId++;
-      messages.unshift(messageObject);
-      pubsub.publish(MESSAGE_ADDED, {
-        messageAdded: messageObject
-      });
-      return messageObject;
+      // TODO
     },
     deleteMessage: (root, args, context, info) => {
-      const id = parseInt(args.id, 10);
-
-      let targetMessage = null;
-      let newMessages = [];
-      messages.forEach((item) => {
-        if (item.id === id) {
-          targetMessage = item;
-        } else {
-          newMessages.push(item);
-        }
-      });
-      messages = newMessages;
-      return targetMessage;
+      // TODO
     }
   },
   Subscription: {
     messageAdded: {
       subscribe: (root, args, context, info) => {
-        const { pubsub } = context;
-        return pubsub.asyncIterator(MESSAGE_ADDED);
+        // TODO
       }
     }
   }
