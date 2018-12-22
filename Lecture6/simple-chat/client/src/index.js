@@ -12,8 +12,6 @@ import { BrowserRouter } from 'react-router-dom';
 
 import App from './App';
 
-// import './global-styles';
-
 // const httpLink = new HttpLink({
 //   uri: process.env.NODE_ENV === 'development' ? 'http://localhost:4000/graphql' : 'https://server-epsezcvcir.now.sh/graphql'
 // });
